@@ -5,13 +5,15 @@
 package lab2__herencia;
 
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Dennisse
  */
 public class Tigo {
 
-    private ArrayList<Plan> planes;
+    ArrayList<Plan> planes;
 
     public Tigo() {
         planes = new ArrayList<>();
@@ -59,6 +61,7 @@ public class Tigo {
             Plan plan = planes.get(i);
             if (plan.getNumeroTelefono() == numeroTel && plan instanceof PlanSamsung) {
                 ((PlanSamsung) plan).agregarPinAmigo(pin);
+                return;
             }
         }
     }
@@ -66,18 +69,24 @@ public class Tigo {
     public void lista() {
         int contadorIPhone = 0;
         int contadorSamsung = 0;
+        StringBuilder resultado = new StringBuilder();
         for (int i = 0; i < planes.size(); i++) {
             Plan plan = planes.get(i);
-            plan.imprimir();
+            resultado.append("Número de Cliente: ").append(plan.getNumeroTelefono()).append("\n");
+            resultado.append("Nombre: ").append(plan.getNombreCliente()).append("\n");
             if (plan instanceof PlanIPhone) {
+                resultado.append("Email: ").append(((PlanIPhone) plan).getEmailITunes()).append("\n");
+                resultado.append("Tipo: IPHONE\n");
                 contadorIPhone++;
             } else if (plan instanceof PlanSamsung) {
+                resultado.append("PIN: ").append(((PlanSamsung) plan).getPin()).append("\n");
+                resultado.append("Tipo: SAMSUNG\n");
                 contadorSamsung++;
             }
+            resultado.append("\n");
         }
-        String mensaje1 = "Total iPhone: " + contadorIPhone;
-        String mensaje2 = "Total Samsung: " + contadorSamsung;
-        System.out.println(mensaje1);
-        System.out.println(mensaje2);
+        resultado.append("Total iPhone: ").append(contadorIPhone).append("\n");
+        resultado.append("Total Samsung: ").append(contadorSamsung).append("\n");
+        JOptionPane.showMessageDialog(null, resultado.toString());
     }
 }

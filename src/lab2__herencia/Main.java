@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 public class Main {
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("GICELL");
+        JFrame frame = new JFrame("TIGO PLANES");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
 
@@ -41,6 +41,9 @@ public class Main {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
+                    if (textNumero.getText().isEmpty() || textNombre.getText().isEmpty() || textExtra.getText().isEmpty() || textTipo.getText().isEmpty()) {
+                        throw new IllegalArgumentException("Debes rellenar todos los datos.");
+                    }
                     int numeroTel = Integer.parseInt(textNumero.getText());
                     String nombre = textNombre.getText();
                     String extra = textExtra.getText();
@@ -59,7 +62,7 @@ public class Main {
                             throw new IllegalArgumentException("El tipo debe ser 'iphone' si se ingresa un email.");
                         }
                     } else {
-                        if (!isNumeric(extra)) {
+                        if (!esNumero(extra)) {
                             throw new IllegalArgumentException("El PIN debe ser un número.");
                         }
                         if (!tipo.equals("samsung")) {
@@ -68,10 +71,14 @@ public class Main {
                     }
 
                     if (tigo.búsqueda(numeroTel, extra, tipo)) {
-                        JOptionPane.showMessageDialog(frame, "Número o dato extra ya existente.");
+                        JOptionPane.showMessageDialog(frame, "Número de teléfono, EMAIL o PIN ya existente, ingrese los datos nuevamente.");
                     } else {
                         tigo.agregarPlan(numeroTel, nombre, extra, tipo);
                         JOptionPane.showMessageDialog(frame, "Plan agregado exitosamente.");
+                        textNumero.setText("");
+                        textNombre.setText("");
+                        textExtra.setText("");
+                        textTipo.setText("");
                     }
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(frame, "El número de teléfono debe ser un número válido.");
@@ -107,8 +114,28 @@ public class Main {
             public void actionPerformed(ActionEvent e) {
                 try {
                     int numeroTel = Integer.parseInt(JOptionPane.showInputDialog("Ingrese número de teléfono:"));
+
+                    if (!tigo.búsqueda(numeroTel, "", "")) {
+                        JOptionPane.showMessageDialog(null, "Número no existe en base de datos.");
+                        return;
+                    }
+
+                    boolean esSamsung = false;
+                    for (Plan plan : tigo.planes) {
+                        if (plan.getNumeroTelefono() == numeroTel && plan instanceof PlanSamsung) {
+                            esSamsung = true;
+                            break;
+                        }
+                    }
+
+                    if (!esSamsung) {
+                        JOptionPane.showMessageDialog(null, "Número no es de tipo Samsung.");
+                        return;
+                    }
+
                     String pin = JOptionPane.showInputDialog("Ingrese PIN de amigo:");
                     tigo.agregarAmigo(numeroTel, pin);
+                    JOptionPane.showMessageDialog(null, "Amigo agregado exitosamente.");
                 } catch (NumberFormatException ex) {
                     JOptionPane.showMessageDialog(frame, "El número de teléfono y el PIN deben ser números válidos.");
                 }
@@ -148,10 +175,9 @@ public class Main {
         frame.setVisible(true);
     }
 
-    // Método para verificar si una cadena es numérica
-    private static boolean isNumeric(String str) {
+    private static boolean esNumero(String string) {
         try {
-            Integer.parseInt(str);
+            Integer.parseInt(string);
             return true;
         } catch (NumberFormatException e) {
             return false;
