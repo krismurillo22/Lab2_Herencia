@@ -8,7 +8,7 @@ import java.util.ArrayList;
  *
  * @author User
  */
-public abstract class PlanSamsung extends Plan{
+public class PlanSamsung extends Plan{
     private String pin;
     private ArrayList<String> bbm;
     

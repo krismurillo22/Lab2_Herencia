@@ -8,7 +8,7 @@ package lab2__herencia;
  *
  * @author User
  */
-public abstract class PlanIPhone extends Plan {
+public class PlanIPhone extends Plan {
     private String emailITunes;
     
     public PlanIPhone(int numeroTelefono, String nombreCliente, String emailITunes) {
