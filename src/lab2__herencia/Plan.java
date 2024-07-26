@@ -12,7 +12,7 @@ public abstract class Plan {
     protected int numeroTelefono;
     protected String nombreCliente;
     
-    public Plan(String nombreCliente, int numeroTelefono) {
+    public Plan(int numeroTelefono, String nombreCliente) {
         this.numeroTelefono = numeroTelefono;
         this.nombreCliente = nombreCliente;
     }
